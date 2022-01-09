@@ -1,6 +1,6 @@
 
 
-let PAT_TOKEN = "uzkjrnz4ynfwz72krvlj7mwe3wfsb6ysmr7r5l2yp2hz2jv5iwbq";
+let PAT_TOKEN = "";
 let BASE_URL = "https://dev.azure.com/fahadrehman/softechcustom/";
 const axios = require('axios');
 
