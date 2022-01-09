@@ -1,7 +1,7 @@
 
 
 let PAT_TOKEN = "";
-let BASE_URL = "https://dev.azure.com/fahadrehman/softechcustom/";
+let BASE_URL = "";
 const axios = require('axios');
 
 var encodedToken = Buffer.from( ":" + PAT_TOKEN).toString('base64');
@@ -138,7 +138,7 @@ async function copyFieldValue(oldFieldName, newFieldName, workkItemType){
    WHERE
        [Custom.ReporostepsDoNotUse] IS NOT EMPTY
        AND [Microsoft.VSTS.TCM.ReproSteps] IS EMPTY
-       AND[System.WorkItemType] = '` + workdItemType + `'
+       AND[System.WorkItemType] = '` + workkItemType + `'
    ORDER BY[System.ID] DESC`;
    let workItemIds =  await getWorkItemIds(query);
 
