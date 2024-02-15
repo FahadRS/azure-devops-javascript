@@ -179,5 +179,70 @@ async function deleteAll(workkItemType){
     }
 }
 
-copyFieldValue("Custom.ReporostepsDoNotUse", "Microsoft.VSTS.TCM.ReproSteps", "Bug")
+//copyFieldValue("Custom.ReporostepsDoNotUse", "Microsoft.VSTS.TCM.ReproSteps", "Bug")
 //deleteAll("Bug");
+
+async function deleteBuildArtifacts(buildArtifacts) {    
+
+        let value = buildArtifacts.data.value;
+        let i = 0;
+        
+        for ( let _value of value){
+         
+            i++;
+            let retensionReleaseURL  = BASE_URL + "_apis/build/builds/"+ _value.id +"/leases?api-version=7.1"
+            let response = await axios.get(retensionReleaseURL, { headers : headers } );  
+            
+            if (response && response.data && response.data.count > 0 ){
+
+                for (let lease of response.data.value){
+
+                    // delete retained releases
+                    let deleteReleaseURL =  BASE_URL + "_apis/build/retention/leases?ids="+ lease.leaseId +"&api-version=6.0"                
+                    let response = await axios.delete(deleteReleaseURL, { headers : patchHeader } );               
+                             
+                }
+            }
+        
+
+
+            
+            let url =  BASE_URL + "_apis/build/builds/" + _value.id + "?api-version=6.0"
+            console.log(url);
+            try{        
+                let response = await axios.delete(url, { headers : patchHeader } );
+            }
+            catch(error){
+                console.log(error);
+            }            
+    }    
+}
+
+async function getBuildArtifacts(){
+
+    return new Promise(function(resolve, reject) {
+
+        let Url  =  BASE_URL + "_apis/build/builds/?api-version=6.0&definitions=91";
+       
+        axios.get(Url, { headers : headers } ).then(function (response) { 
+          
+            resolve(response);
+        })
+        .catch(function (error) {
+            console.log("Deleted ticket Failed");         
+            reject(error);
+        });
+    });
+}
+
+//GET https://dev.azure.com/{organization}/{project}/_apis/build/builds/{buildId}/leases?api-version=7.1-preview.1
+
+async function load(){
+    let buildArtifacts = await getBuildArtifacts();
+    deleteBuildArtifacts(buildArtifacts);
+}
+
+load();
+
+
+
